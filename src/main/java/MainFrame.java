@@ -11,15 +11,12 @@ import java.util.stream.Collectors;
 public class MainFrame extends JFrame {
     private static final Logger LOG = Logger.getLogger(MainFrame.class.getName());
     
-    // UI components
     private final JLabel statusLabel;
     private final DefaultListModel<String> listModel;
     private final JList<String> fileList;
     private final BarPanel complexityPanel;
     private final BarPanel sizePanel;
     private final OverallPanel overallPanel;
-    
-    // State (minimal)
     private File currentFolder;
 
     public MainFrame() {
@@ -29,7 +26,6 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Initialize components
         statusLabel = new JLabel("Ready");
         listModel = new DefaultListModel<>();
         fileList = new JList<>(listModel);
@@ -37,7 +33,6 @@ public class MainFrame extends JFrame {
         sizePanel = new BarPanel("Size", new Color(0xFFB3E6));
         overallPanel = new OverallPanel();
 
-        // Build UI
         add(createFileListPanel(), BorderLayout.WEST);
         add(createMetricsPanel(), BorderLayout.CENTER);
         add(createStatusBar(), BorderLayout.SOUTH);

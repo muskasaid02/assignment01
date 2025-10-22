@@ -17,7 +17,6 @@ public class OverallPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        // Draw title
         g.setColor(Color.BLACK);
         g.setFont(new Font("SansSerif", Font.BOLD, 14));
         FontMetrics fm = g.getFontMetrics();
@@ -36,7 +35,6 @@ public class OverallPanel extends JPanel {
         int cy = getHeight() / 2 + 20;
         int r = 60;
 
-        // face circle
         Color faceColor;
         if (mood == Mood.HAPPY) {
             faceColor = new Color(0xCCFFCC);
@@ -52,11 +50,9 @@ public class OverallPanel extends JPanel {
         g2.setStroke(new BasicStroke(2f));
         g2.drawOval(cx - r, cy - r, 2 * r, 2 * r);
 
-        // eyes
         g2.fillOval(cx - 20, cy - 15, 10, 10);
         g2.fillOval(cx + 10, cy - 15, 10, 10);
 
-        // mouth
         g2.setStroke(new BasicStroke(3f));
         int mw = 40;
         int mh = 20;
@@ -64,7 +60,7 @@ public class OverallPanel extends JPanel {
             g2.drawArc(cx - mw/2, cy - 5, mw, mh, 200, 140);
         } else if (mood == Mood.NEUTRAL) {
             g2.drawLine(cx - mw/2, cy + 10, cx + mw/2, cy + 10);
-        } else { // SAD
+        } else {
             g2.drawArc(cx - mw/2, cy + 10, mw, mh, 20, 140);
         }
 
