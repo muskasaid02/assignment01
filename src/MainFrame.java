@@ -183,12 +183,12 @@ public class MainFrame extends JFrame {
 
     private void analyzeFile(File file) {
         statusLabel.setText("Analyzing: " + file.getName());
-        SwingWorker<FileAnalyzer.AnalysisResult, String> worker = new SwingWorker<>() {
+        SwingWorker<AnalysisResult, String> worker = new SwingWorker<>() {
             @Override
-            protected FileAnalyzer.AnalysisResult doInBackground() throws Exception {
+            protected AnalysisResult doInBackground() throws Exception {
                 publish("Counting lines...");
                 FileAnalyzer analyzer = new FileAnalyzer();
-                FileAnalyzer.AnalysisResult res = analyzer.analyze(file);
+                AnalysisResult res = analyzer.analyze(file);
                 publish("Updating visuals...");
                 return res;
             }
@@ -203,7 +203,7 @@ public class MainFrame extends JFrame {
             @Override
             protected void done() {
                 try {
-                    FileAnalyzer.AnalysisResult res = get();
+                    AnalysisResult res = get();
                     updateMetrics(res);
                     statusLabel.setText("Done. Lines=" + res.getLineCount() + 
                             ", Controls=" + res.getControlCount() + ", Mood=" + res.getMood());
@@ -216,7 +216,7 @@ public class MainFrame extends JFrame {
         worker.execute();
     }
 
-    private void updateMetrics(FileAnalyzer.AnalysisResult result) {
+    private void updateMetrics(AnalysisResult result) {
         complexityPanel.setValue(result.getControlCount());
         sizePanel.setValue(result.getLineCount());
         overallPanel.setMood(result.getMood());
@@ -228,126 +228,5 @@ public class MainFrame extends JFrame {
         complexityPanel.setValue(0);
         sizePanel.setValue(0);
         overallPanel.setMood(null);
-    }
-
-    // Inner class for bar charts
-    private static class BarPanel extends JPanel {
-        private int value = 0;
-        private final Color barColor;
-        private final String title;
-
-        public BarPanel(String title, Color barColor) {
-            this.title = title;
-            this.barColor = barColor;
-            setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        }
-
-        public void setValue(int value) {
-            this.value = Math.max(0, value);
-            repaint();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            // Draw title
-            g2.setColor(Color.BLACK);
-            g2.setFont(new Font("SansSerif", Font.BOLD, 14));
-            FontMetrics fm = g2.getFontMetrics();
-            int titleWidth = fm.stringWidth(title);
-            g2.drawString(title, (getWidth() - titleWidth) / 2, 25);
-
-            // Calculate bar dimensions
-            int barWidth = 80;
-            int maxBarHeight = getHeight() - 80;
-            int barHeight = Math.min((int)(value * 3), maxBarHeight);
-            
-            int x = (getWidth() - barWidth) / 2;
-            int y = getHeight() - barHeight - 40;
-
-            // Draw bar
-            g2.setColor(barColor);
-            g2.fillRect(x, y, barWidth, barHeight);
-            g2.setColor(Color.BLACK);
-            g2.setStroke(new BasicStroke(1f));
-            g2.drawRect(x, y, barWidth, barHeight);
-
-            g2.dispose();
-        }
-    }
-
-    // Inner class for mood display
-    private static class OverallPanel extends JPanel {
-        private FileAnalyzer.AnalysisResult.Mood mood = null;
-
-        public OverallPanel() {
-            setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        }
-
-        public void setMood(FileAnalyzer.AnalysisResult.Mood mood) {
-            this.mood = mood;
-            repaint();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            
-            // Draw title
-            g.setColor(Color.BLACK);
-            g.setFont(new Font("SansSerif", Font.BOLD, 14));
-            FontMetrics fm = g.getFontMetrics();
-            String title = "Overall";
-            int titleWidth = fm.stringWidth(title);
-            g.drawString(title, (getWidth() - titleWidth) / 2, 25);
-            
-            if (mood == null) {
-                return;
-            }
-            
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            int cx = getWidth() / 2;
-            int cy = getHeight() / 2 + 20;
-            int r = 60;
-
-            // face circle
-            Color faceColor;
-            if (mood == FileAnalyzer.AnalysisResult.Mood.HAPPY) {
-                faceColor = new Color(0xCCFFCC);
-            } else if (mood == FileAnalyzer.AnalysisResult.Mood.NEUTRAL) {
-                faceColor = new Color(0xCCFFFF);
-            } else {
-                faceColor = new Color(0xFFFFCC);
-            }
-            
-            g2.setColor(faceColor);
-            g2.fillOval(cx - r, cy - r, 2 * r, 2 * r);
-            g2.setColor(Color.BLACK);
-            g2.setStroke(new BasicStroke(2f));
-            g2.drawOval(cx - r, cy - r, 2 * r, 2 * r);
-
-            // eyes
-            g2.fillOval(cx - 20, cy - 15, 10, 10);
-            g2.fillOval(cx + 10, cy - 15, 10, 10);
-
-            // mouth
-            g2.setStroke(new BasicStroke(3f));
-            int mw = 40;
-            int mh = 20;
-            if (mood == FileAnalyzer.AnalysisResult.Mood.HAPPY) {
-                g2.drawArc(cx - mw/2, cy - 5, mw, mh, 200, 140);
-            } else if (mood == FileAnalyzer.AnalysisResult.Mood.NEUTRAL) {
-                g2.drawLine(cx - mw/2, cy + 10, cx + mw/2, cy + 10);
-            } else { // SAD
-                g2.drawArc(cx - mw/2, cy + 10, mw, mh, 20, 140);
-            }
-
-            g2.dispose();
-        }
     }
 }
