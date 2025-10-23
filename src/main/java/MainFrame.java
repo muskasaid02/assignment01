@@ -212,8 +212,8 @@ public class MainFrame extends JFrame {
     }
 
     private void updateMetrics(AnalysisResult result) {
-        complexityPanel.setValue(result.getControlCount());
-        sizePanel.setValue(result.getLineCount());
+        complexityPanel.setValue(result.getControlCount() * 3);
+        sizePanel.setValue(result.getLineCount() * 3);
         overallPanel.setMood(result.getMood());
         revalidate();
         repaint();
