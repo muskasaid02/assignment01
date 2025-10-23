@@ -1,6 +1,4 @@
 public class AnalysisResult {
-    public enum Mood { HAPPY, NEUTRAL, SAD }
-
     private final int lineCount;
     private final int controlCount;
     private final boolean hasAuthor;

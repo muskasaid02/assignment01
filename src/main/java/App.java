@@ -3,7 +3,6 @@ import java.util.logging.*;
 
 public class App {
     public static void main(String[] args) {
-        // Simple logging config (console INFO)
         Logger root = LogManager.getLogManager().getLogger("");
         root.setLevel(Level.INFO);
         for (Handler h : root.getHandlers()) {
