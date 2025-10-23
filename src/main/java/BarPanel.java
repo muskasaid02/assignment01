@@ -31,7 +31,7 @@ public class BarPanel extends JPanel {
 
         int barWidth = 80;
         int maxBarHeight = getHeight() - 80;
-        int barHeight = Math.min((int)(value * 3), maxBarHeight);
+        int barHeight = Math.min(value, maxBarHeight);
         
         int x = (getWidth() - barWidth) / 2;
         int y = getHeight() - barHeight - 40;
