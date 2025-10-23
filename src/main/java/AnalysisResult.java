@@ -1,3 +1,8 @@
+/**
+ * @author Muska Said Hasan Mustafa and Nick Gottwald
+ * @version 1.0
+ */
+
 public class AnalysisResult {
     private final int lineCount;
     private final int controlCount;
