@@ -1,3 +1,8 @@
+/**
+ * @author Muska Said Hasan Mustafa and Nick Gottwald
+ * @version 1.0
+ */
+
 import java.io.*;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
